@@ -96,6 +96,7 @@ exports.getUserProfile = asyncHandler(async (req, res) => {
 //@route PUT /api/users/profile
 //@access Private
 exports.updateUserProfile = asyncHandler(async (req, res) => {
+  console.log(res.body);
   const user = await userModel.findById(req.user._id);
   if (!user) {
     res.status(400);
@@ -104,7 +105,8 @@ exports.updateUserProfile = asyncHandler(async (req, res) => {
   user.name = req.body.name || user.name;
   user.email = req.body.email || user.email;
   if (req.body.password) {
-    user.password = req.body.password;
+    const hashPassword = await bcrypt.hash(req.body.password, 10);
+    user.password = hashPassword;
   }
   const updatedUser = await user.save();
   res.status(200).json({
@@ -119,26 +121,60 @@ exports.updateUserProfile = asyncHandler(async (req, res) => {
 //@route GET /api/users
 //@access Private/Admin
 exports.getUsers = asyncHandler(async (req, res) => {
-  res.status(200).send("getUsers user");
+  const users = await userModel.find({});
+  res.status(200).json(users);
 });
 
 //@desc  get User
 //@route GET /api/users/:id
 //@access Private/Admin
 exports.getUserById = asyncHandler(async (req, res) => {
-  res.status(200).send("getUserById user");
+  const user = await userModel
+    .findOne({ _id: req.params.id })
+    .select("-password");
+  if (user) {
+    res.status(200).json(user);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
 });
 
 //@desc  update User
 //@route PUT /api/users/:id
 //@access Private/Admin
 exports.updateUser = asyncHandler(async (req, res) => {
-  res.status(200).send("updateUser user");
+  console.log(req);
+  const user = await userModel.findById(req.params.id);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+  user.name = req.body.name || user.name;
+  user.email = req.body.email || user.email;
+  user.isAdmin = Boolean(req.body.isAdmin);
+  const updatedUser = await user.save();
+  res.status(200).json({
+    _id: updatedUser._id,
+    name: updatedUser.name,
+    isAdmin: updatedUser.isAdmin,
+  });
 });
 
 //@desc  Delete Users
 //@route DELETE /api/users/:id
 //@access Private/Admin
 exports.deleteUser = asyncHandler(async (req, res) => {
-  res.status(200).send("deleteUser user");
+  const user = await userModel.findById(req.params.id);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+  if (user.isAdmin) {
+    res.status(400);
+    throw new Error("Cannot Delete Admin User");
+  }
+
+  await userModel.deleteOne({ _id: user._id });
+  res.status(200).send("User Deleted Successfully");
 });

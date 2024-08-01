@@ -15,32 +15,32 @@ router.put(
   userController.updateUserProfile
 );
 
-router.put(
-  "/users",
+router.get(
+  "/",
   authMiddleWare.protect,
   authMiddleWare.admin,
   userController.getUsers
 );
 
 router.get(
-  "/users/:id",
+  "/:id",
   authMiddleWare.protect,
   authMiddleWare.admin,
-  userController.getUsers
+  userController.getUserById
 );
 
 router.put(
-  "/users/:id",
+  "/:id",
   authMiddleWare.protect,
   authMiddleWare.admin,
-  userController.getUsers
+  userController.updateUser
 );
 
 router.delete(
-  "/users/:id",
+  "/:id",
   authMiddleWare.protect,
   authMiddleWare.admin,
-  userController.getUsers
+  userController.deleteUser
 );
 
 module.exports = router;
