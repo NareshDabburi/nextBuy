@@ -1,8 +1,9 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
+  "name": "nextbuy",
+  "version": "0.0.0",
   "private": true,
   "proxy": "http://localhost:5000",
+  "author": "Naresh Dabburi",
   "dependencies": {
     "@paypal/react-paypal-js": "^8.5.0",
     "@reduxjs/toolkit": "^2.2.6",
