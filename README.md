@@ -5,6 +5,7 @@ Install Node in your system. This project was build on Node version: v18.17.1
 Enter into root folder and run the below queries
 -> npm install
 -> npm start
+-> npm run server // for nodemon
 
 Enter into frontend folder and run the below queries
 -> npm install

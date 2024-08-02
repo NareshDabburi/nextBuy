@@ -6,6 +6,7 @@ import logo1 from "../assets/logo-1.png"
 import {useSelector,useDispatch} from "react-redux";
 import { useLogoutMutation } from '../slices/userApiSlice';
 import {logout} from "../slices/authSlice";
+import { clearCartItems } from '../slices/cartSlice';
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
@@ -21,6 +22,7 @@ const Header = () => {
         try{
         await logOutApiCall().unwrap();
         dispatch(logout());
+        dispatch(clearCartItems());
         navigate("/login");
         }catch(err){
             console.log(err);
