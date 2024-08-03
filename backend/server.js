@@ -8,6 +8,8 @@ const errorMiddleWare = require("./middleWare/errorMiddleWare");
 const userRoutes = require("./routes/userRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
+const uploadS3Routes = require("./routes/uploadToS3Routes");
+const downloadS3Routes = require("./routes/downloadFromS3");
 const cookieParser = require("cookie-parser");
 const app = express();
 dbConnection();
@@ -19,6 +21,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/uploads", uploadRoutes);
+app.use("/api/uploads/s3", uploadS3Routes);
+app.use("/api/downloads/s3", downloadS3Routes);
 
 app.get("/api/config/paypal", (req, res) =>
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID })

@@ -6,9 +6,9 @@ import logo1 from "../assets/logo-1.png"
 import {useSelector,useDispatch} from "react-redux";
 import { useLogoutMutation } from '../slices/userApiSlice';
 import {logout} from "../slices/authSlice";
-import { clearCartItems } from '../slices/cartSlice';
 import { useNavigate } from 'react-router-dom';
 import { resetCart } from '../slices/cartSlice';
+import SearchBox from './SearchBox'
 
 const Header = () => {
     const{cartItems} = useSelector((state)=>state.cart);
@@ -42,16 +42,18 @@ const Header = () => {
                 </LinkContainer>
                 <Navbar.Toggle aria-controls='basic-navbar-nav'/>
                 <Navbar.Collapse id="basic-navbar-bar">
+                    
                     <Nav className='ms-auto'>
-
+                        
                         <LinkContainer to="/cart">
                             <Nav.Link href="/cart"><FaShoppingCart/>Cart 
-                                {cartItems.length >0 && (
+                                {cartItems?.length >0 && (
                                     <Badge pill bg='success' style={{marginLeft : '5px'}}>
                                         {cartItems.reduce((a,c)=> a+c.qty,0)}
                                     </Badge>)}
                             </Nav.Link>
                         </LinkContainer>
+                        
                         {userInfo ? 
                         (
                             <NavDropdown title = {userInfo.name} id="username">

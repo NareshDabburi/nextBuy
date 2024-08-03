@@ -39,8 +39,8 @@ const PlaceOrderScreen = () => {
             dispatch(clearCartItems())
             navigate(`/orders/${res._id}`)
 
-        }catch(error){
-            toast.error(error);
+        }catch(err){
+            toast.error(err?.data.message || err?.message);
         }
     }
   return (

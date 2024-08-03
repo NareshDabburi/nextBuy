@@ -4,8 +4,19 @@ const asyncHandler = require("express-async-handler");
 //@desc fetch all products
 // api path /api/products/getAllProducts
 exports.getAllProducts = asyncHandler(async (req, res) => {
-  const products = await productModel.find();
-  res.status(200).json(products);
+  const pageSize = process.env.PAGINATION_LIMIT;
+  const page = Number(req.query.pageNumber) || 1;
+
+  const keyword = req.query.keyword
+    ? { name: { $regex: req.query.keyword, $options: "i" } }
+    : {};
+
+  const count = await productModel.countDocuments({ ...keyword });
+  const products = await productModel
+    .find({ ...keyword })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+  res.status(200).json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
 //@desc fetch a product based on id
@@ -66,7 +77,6 @@ exports.updateProduct = asyncHandler(async (req, res) => {
 //@route DELTE /api/products/:id
 //@access Private/Admin
 exports.deleteProduct = asyncHandler(async (req, res) => {
-  console.log("DELETE");
   const product = await productModel.findById(req.params.id);
   if (!product) {
     res.status(404);
@@ -74,4 +84,53 @@ exports.deleteProduct = asyncHandler(async (req, res) => {
   }
   await product.deleteOne({ _id: product._id });
   res.status(200).json({ message: "Product Deleted" });
+});
+
+//@desc create a new review
+//@route POST /api/products/:id/reviews
+//@access Private
+exports.createProductReview = asyncHandler(async (req, res) => {
+  const { rating, comment } = req.body;
+
+  const product = await productModel.findById(req.params.id);
+
+  if (product) {
+    const alreadyReviewed = product.reviews.find(
+      (r) => r.user.toString() === req.user._id.toString()
+    );
+
+    if (alreadyReviewed) {
+      res.status(400);
+      throw new Error("Product already reviewed");
+    }
+
+    const review = {
+      name: req.user.name,
+      rating: Number(rating),
+      comment,
+      user: req.user._id,
+    };
+
+    product.reviews.push(review);
+
+    product.numReviews = product.reviews.length;
+
+    product.rating =
+      product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+      product.reviews.length;
+
+    await product.save();
+    res.status(201).json({ message: "Review added" });
+  } else {
+    res.status(404);
+    throw new Error("Product not found");
+  }
+});
+
+//@desc Get top rated product
+//@route GET /api/products/top
+//@access Public
+exports.getTopProducts = asyncHandler(async (req, res) => {
+  const products = await productModel.find({}).sort({ rating: -1 }).limit(3);
+  res.status(200).json(products);
 });

@@ -41,7 +41,7 @@ const UserListScreen = () => {
                     <tr key={user._id}>
                         <td>{user._id}</td>
                         <td>{user.name}</td>
-                        <td><a href={`mailTo:${user.email}`}></a>{user.email}</td>
+                        <td><a href={`mailTo:${user.email}`}>{user.email}</a></td>
                         <td>{user.isAdmin ? <FaCheck style={{color:'green'}}/> : <FaTimes style={{color:'red'}}/>}</td>
                         <td>
                             <LinkContainer to={`/admin/user/${user._id}/edit`}>
