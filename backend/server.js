@@ -30,7 +30,7 @@ app.get("/api/config/paypal", (req, res) =>
 
 //healthcheck
 app.get("/health", (req, res) => {
-  res.status(200);
+  res.status(200).json({ message: process.env.NODE_ENV });
 });
 
 //make upload folder as static folder
