@@ -30,11 +30,19 @@ import UserListScreen from "./screens/admin/UserListScreen";
 import UserEditScreen from "./screens/admin/UserEditScreen";
 import { Provider } from "react-redux";
 import store from "./store";
+import { HelmetProvider } from "react-helmet-async";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route index path="/" element={<HomeScreen />}></Route>
+      <Route index={true} path="/" element={<HomeScreen />}></Route>
+      <Route path="/search/:keyword" element={<HomeScreen />}></Route>
+      <Route path="/page/:pageNumber" element={<HomeScreen />}></Route>
+      <Route
+        path="/search/:keyword/page/:pageNumber"
+        element={<HomeScreen />}
+      ></Route>
+
       <Route path="/product/:id" element={<ProductScreen />}></Route>
       <Route path="/cart" element={<CartScreen />}></Route>
       <Route path="/login" element={<LoginScreen />}></Route>
@@ -54,6 +62,10 @@ const router = createBrowserRouter(
           element={<ProductListScreen />}
         ></Route>
         <Route
+          path="/admin/productlist/:pageNumber"
+          element={<ProductListScreen />}
+        ></Route>
+        <Route
           path="/admin/product/:id/edit"
           element={<ProductEditScreen />}
         ></Route>
@@ -67,11 +79,13 @@ const router = createBrowserRouter(
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <PayPalScriptProvider differLoadin={true}>
-        <RouterProvider router={router}></RouterProvider>
-      </PayPalScriptProvider>
-    </Provider>
+    <HelmetProvider>
+      <Provider store={store}>
+        <PayPalScriptProvider differLoadin={true}>
+          <RouterProvider router={router}></RouterProvider>
+        </PayPalScriptProvider>
+      </Provider>
+    </HelmetProvider>
   </React.StrictMode>
 );
 

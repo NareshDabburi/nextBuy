@@ -18,7 +18,7 @@ const ProductEditScreen = () => {
     const[description,setDescription] = useState("");
 
 
-    const{data:product,isLoading,refetch,error} = useGetProductDetailsQuery(productId);
+    const{data:product,isLoading,error} = useGetProductDetailsQuery(productId);
     const[updateProduct,{isLoading:loadingUpdate}] = useUpdateProductMutation();
     const[uploadProductImage,{isLoading:loadingUpload}] = useUploadProductImageMutation();
     const navigate = useNavigate();
@@ -76,7 +76,8 @@ const ProductEditScreen = () => {
     <FormContainer>
         <h1>Edit Product</h1>
         {loadingUpdate && <Loader/>}
-        {isLoading ? <Loader/> : error ? <Message variant='danger'>{error}</Message> : (
+        {loadingUpload && <Loader/>}
+        {isLoading ? <Loader/> : error ? <Message variant='danger'>{error.data.message}</Message> : (
             <Form onSubmit={submitHandler}>
                 <Form.Group controlId="name">
                     <Form.Label>Name</Form.Label>

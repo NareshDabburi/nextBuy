@@ -4,6 +4,7 @@ const authMiddleWare = require("../middleWare/authMiddleWare");
 const productController = require("../controllers/productController");
 
 router.get("/getAllProducts", productController.getAllProducts);
+
 router.get("/getProduct/:id", productController.getProduct);
 router.post(
   "/",
@@ -23,5 +24,12 @@ router.delete(
   authMiddleWare.admin,
   productController.deleteProduct
 );
+
+router.post(
+  "/:id/reviews",
+  authMiddleWare.protect,
+  productController.createProductReview
+);
+router.get("/top", productController.getTopProducts);
 
 module.exports = router;

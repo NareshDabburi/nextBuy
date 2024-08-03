@@ -2,11 +2,13 @@ import React from 'react'
 import {Navbar,Nav,Container,Badge, NavDropdown} from 'react-bootstrap';
 import {FaShoppingCart, FaUser} from 'react-icons/fa';
 import {LinkContainer} from "react-router-bootstrap";
-import logo from "../assets/logo.png"
+import logo1 from "../assets/logo-1.png"
 import {useSelector,useDispatch} from "react-redux";
 import { useLogoutMutation } from '../slices/userApiSlice';
 import {logout} from "../slices/authSlice";
 import { useNavigate } from 'react-router-dom';
+import { resetCart } from '../slices/cartSlice';
+import SearchBox from './SearchBox'
 
 const Header = () => {
     const{cartItems} = useSelector((state)=>state.cart);
@@ -21,6 +23,8 @@ const Header = () => {
         try{
         await logOutApiCall().unwrap();
         dispatch(logout());
+        // dispatch(clearCartItems());
+        dispatch(resetCart());
         navigate("/login");
         }catch(err){
             console.log(err);
@@ -33,21 +37,23 @@ const Header = () => {
             <Container>
                 <LinkContainer to="/">
                 <Navbar.Brand >
-                <img src = {logo} alt=""/>
-                ProShop</Navbar.Brand>
+                <img src = {logo1} alt="" style={{height:"50px"}}/>
+                NextBuy</Navbar.Brand>
                 </LinkContainer>
                 <Navbar.Toggle aria-controls='basic-navbar-nav'/>
                 <Navbar.Collapse id="basic-navbar-bar">
+                    
                     <Nav className='ms-auto'>
-
+                        
                         <LinkContainer to="/cart">
                             <Nav.Link href="/cart"><FaShoppingCart/>Cart 
-                                {cartItems.length >0 && (
+                                {cartItems?.length >0 && (
                                     <Badge pill bg='success' style={{marginLeft : '5px'}}>
                                         {cartItems.reduce((a,c)=> a+c.qty,0)}
                                     </Badge>)}
                             </Nav.Link>
                         </LinkContainer>
+                        
                         {userInfo ? 
                         (
                             <NavDropdown title = {userInfo.name} id="username">
