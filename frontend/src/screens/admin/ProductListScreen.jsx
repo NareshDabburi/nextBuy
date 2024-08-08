@@ -43,7 +43,7 @@ const ProductListScreen = () => {
         <h1>Products</h1>
         </Col>
         <Col className="text-end">
-        <Button className="btn-sm my-3" onClick={createProductHandler}>
+        <Button className="btn-sm my-3 "  onClick={createProductHandler}>
             <FaEdit/> Create Product
         </Button>
         </Col>

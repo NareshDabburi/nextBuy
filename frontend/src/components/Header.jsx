@@ -8,7 +8,7 @@ import { useLogoutMutation } from '../slices/userApiSlice';
 import {logout} from "../slices/authSlice";
 import { useNavigate } from 'react-router-dom';
 import { resetCart } from '../slices/cartSlice';
-import SearchBox from './SearchBox'
+
 
 const Header = () => {
     const{cartItems} = useSelector((state)=>state.cart);

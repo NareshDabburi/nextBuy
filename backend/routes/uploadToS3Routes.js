@@ -54,7 +54,11 @@ router.post(
     )}`;
     console.log(fileName);
 
-    const buffer = await sharp(req.file.buffer).toBuffer();
+    //const buffer = await sharp(req.file.buffer).toBuffer();
+
+    const buffer = await sharp(req.file.buffer)
+      .resize({ height: 1920, widht: 1080, fit: "contain" })
+      .toBuffer();
 
     const params = {
       Bucket: `${bucketName}`,
