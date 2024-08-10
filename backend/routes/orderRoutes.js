@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const orderController = require("../controllers/orderController");
 const authMiddleWare = require("../middleWare/authMiddleWare");
+const checkProductInStock = require("../middleWare/checkProductInStock");
 
 //add order items
 router.post("/", authMiddleWare.protect, orderController.addOrderItems);
@@ -27,6 +28,7 @@ router.put(
   "/:id/deliver",
   authMiddleWare.protect,
   authMiddleWare.admin,
+  checkProductInStock.productInStock,
   orderController.updateOrderToDelivered
 );
 

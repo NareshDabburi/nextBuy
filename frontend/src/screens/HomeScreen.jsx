@@ -15,7 +15,7 @@ const HomeScreen = () => {
 
   return (
     <>
-    {!keyword ? <ProductCarosel/>  :  <Link to="/" className='btn btn-ligh mb-4'>Go Back</Link>}
+    {!keyword ? <ProductCarosel/>  :  <Link to="/" className='btn btn-light mb-4'>Go Back</Link>}
     { isLoading ? (<Loader/>) : error ? 
     (
       <Message variant={'danger'}>{error?.error.data?.message || error.message}</Message>
@@ -23,7 +23,7 @@ const HomeScreen = () => {
     : 
     (
     <>
-        <h1>Latest Products</h1>
+        <h1 className='theme-heading theme-text-dark-green mt-4 mb-4'>Latest Products</h1>
         <Row>
             {data?.products.map((product)=>(
                 <Col key={product._id}sm={12} md={6} lg={4} xl={3}>

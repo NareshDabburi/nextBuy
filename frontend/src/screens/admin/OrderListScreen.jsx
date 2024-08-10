@@ -12,20 +12,51 @@ const OrderListScreen = () => {
   console.log(orders);
   return (
     <>
-      <h1>Order</h1>
+      <div className="theme-heading theme-text-dark-green">Order</div>
       {isLoading ? <Loader/> : error ? <Message variant='danger'>{error}</Message>:(
-        <Table striped hover responsive className="table-sm">
+        // <Table striped hover responsive className="table-sm">
+        //   <thead>
+        //     <tr>
+        //       <th>ID</th>
+        //       <th>USER</th>
+        //       <th>DATE</th>
+        //       <th>TOTAL</th>
+        //       <th>PAID</th>
+        //       <th>DELIVERED</th>
+        //     </tr>
+        //   </thead>
+        //   <tbody>
+        //     {orders.map((order)=>(
+        //       <tr key={order._id}>
+        //         <td>{order._id}</td>
+        //         <td>{order.user && order.user.name}</td>
+        //         <td>{order.createdAt && order.createdAt.substring(0,10)}</td>
+        //         <td>{order.totalPrice && order.totalPrice}</td>
+        //         <td>{order.isPaid ? order.paidAt.substring(0,10): <FaTimes style={{color:'red'}}/>}</td>
+        //         <td>{order.isDelivered ? order.deliveredAt.substring(0,10) : <FaTimes style={{color:'red'}}/>}</td>
+        //         <td>
+        //           <LinkContainer to={`/orders/${order._id}`}>
+        //             <Button variant="dark" className="btn-sm">Details</Button>
+        //           </LinkContainer>
+        //         </td>
+        //       </tr>
+        //     ))}
+        //   </tbody>
+        // </Table>
+
+        <table className="table">
           <thead>
-            <tr>
+            <tr className="theme-text-bold-sm theme-green">
               <th>ID</th>
               <th>USER</th>
               <th>DATE</th>
               <th>TOTAL</th>
               <th>PAID</th>
               <th>DELIVERED</th>
+              <th></th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="theme-text-grey">
             {orders.map((order)=>(
               <tr key={order._id}>
                 <td>{order._id}</td>
@@ -36,13 +67,13 @@ const OrderListScreen = () => {
                 <td>{order.isDelivered ? order.deliveredAt.substring(0,10) : <FaTimes style={{color:'red'}}/>}</td>
                 <td>
                   <LinkContainer to={`/orders/${order._id}`}>
-                    <Button variant="dark" className="btn-sm">Details</Button>
+                    <button className="theme-btn rounded p-1">Details</button>
                   </LinkContainer>
                 </td>
               </tr>
             ))}
           </tbody>
-        </Table>
+        </table>
       )}
     </>
   )

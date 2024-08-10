@@ -47,8 +47,8 @@ const ProfileScreen = () => {
   return (
     <Row>
         <Col md={3}>
-        <h2>User Profile</h2>
-        <Form onSubmit={submitHandler}>
+        <div className="theme-heading theme-text-dark-green">User Profile</div>
+        <Form onSubmit={submitHandler} className='theme-text-grey'>
             <Form.Group controlId="name" className="my-2">
                 <Form.Label>Name</Form.Label>
                 <Form.Control type='name' placeholder="Enter name" value={name} onChange={(e)=>setName(e.target.value)}></Form.Control>
@@ -65,15 +65,15 @@ const ProfileScreen = () => {
                 <Form.Label>Confirm Password</Form.Label>
                 <Form.Control type='password' placeholder="Enter confirm password" value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)}></Form.Control>
             </Form.Group>
-            <Button type="submit" variant="primary" className="my-2" >Update</Button>
+            <Button type="submit" variant="primary" className="my-2 theme-btn" >Update</Button>
         {loadingUpdateProfile && <Loader/> }
         </Form>
         
         </Col>
         <Col md={9}>
-            <h2>My Orders</h2>
+            <div className="theme-heading theme-text-dark-green">My Orders</div>
             {isLoading ? (<Loader/>) : error ? (<Message variant='danger'>{error?.data?.message || error.error}</Message>) : (
-                <Table striped hover responsive className="table-sm">
+                <table className="table theme-text-grey" >
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -91,21 +91,23 @@ const ProfileScreen = () => {
                                 <td>{order.createdAt.substring(0,10)}</td>
                                 <td>{order.totalPrice}</td>
                                 <td>
-                                    {order.isPaid?(order.paidAt.substring(0,10)):(<FaTimes style={{color:'red'}}/>)}
+                                    {order.isPaid?(<div className="bg-green-100 rounded-full">
+                                        {order.paidAt.substring(0,10)}
+                                    </div>):(<div className="pl-14"><FaTimes style={{color:'red'}}/></div>)}
                                 </td>
                                 <td>
-                                    {order.isDelivered?(order.deliveredAt.substring(0,10)):(<FaTimes style={{color:'red'}}/>)}
+                                    {order.isDelivered?(<div className="bg-green-100 rounded-full">{order.deliveredAt.substring(0,10)}</div>):(<FaTimes style={{color:'red'}}/>)}
                                 </td>
                                 <td>
                                     <LinkContainer to={`/orders/${order._id}`}>
-                                        <Button className="btn-sm" variant="light">Details</Button>
+                                        <Button className="btn-sm theme-btn"  variant="light">Details</Button>
                                     </LinkContainer>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
 
-                </Table>
+                </table>
             )}
         </Col>
         

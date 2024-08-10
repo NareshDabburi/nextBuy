@@ -31,49 +31,54 @@ const Header = () => {
         }
 
     }
+
   return (
     <header>
-        <Navbar bg="dark" variant="dark" expand="md" collapseOnSelect>
+        <Navbar variant="dark" expand="md" collapseOnSelect className='theme-green'>
             <Container>
                 <LinkContainer to="/">
-                <Navbar.Brand >
+                <Navbar.Brand className='flex'>
                 <img src = {logo1} alt="" style={{height:"50px"}}/>
-                NextBuy</Navbar.Brand>
+                <div className='mt-2 '>
+                    NextBuy
+                </div>
+                </Navbar.Brand>
                 </LinkContainer>
                 <Navbar.Toggle aria-controls='basic-navbar-nav'/>
                 <Navbar.Collapse id="basic-navbar-bar">
                     
                     <Nav className='ms-auto'>
                         
-                        <LinkContainer to="/cart">
-                            <Nav.Link href="/cart"><FaShoppingCart/>Cart 
+                        <LinkContainer to="/cart" className='flex theme-white'>
+                            <Nav.Link href="/cart" ><FaShoppingCart className='m-1 '/>
+                            <div>Cart</div>
                                 {cartItems?.length >0 && (
-                                    <Badge pill bg='success' style={{marginLeft : '5px'}}>
-                                        {cartItems.reduce((a,c)=> a+c.qty,0)}
+                                    <Badge  className='ml-1'>
+                                       {cartItems.reduce((a,c)=> a+c.qty,0)}
                                     </Badge>)}
                             </Nav.Link>
                         </LinkContainer>
                         
                         {userInfo ? 
                         (
-                            <NavDropdown title = {userInfo.name} id="username">
+                            <NavDropdown id="username" title={<span className="theme-white">{userInfo.name}</span>}>
                                 <LinkContainer to='/profile'>
-                                <NavDropdown.Item>Profile</NavDropdown.Item>
+                                <NavDropdown.Item className='theme-text-grey'>Profile</NavDropdown.Item>
                                 </LinkContainer>
-                                <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
+                                <NavDropdown.Item className='theme-text-grey' onClick={logoutHandler}>Logout</NavDropdown.Item>
                             </NavDropdown>
                         ) : 
-                        ( <LinkContainer to="/login"><Nav.Link href="/login"><FaUser/>Sign In</Nav.Link></LinkContainer>)}
+                        ( <LinkContainer to="/login" className='flex theme-white'><Nav.Link href="/login"><FaUser className='m-1'/>Sign In</Nav.Link></LinkContainer>)}
                         {userInfo && userInfo.isAdmin && (
-                            <NavDropdown title="Admin"id="adminmenu">
+                            <NavDropdown title={<span className="theme-white">Admin</span>} id="adminmenu">
                                 <LinkContainer to='/admin/productlist'>
-                                <NavDropdown.Item>Products</NavDropdown.Item>
+                                <NavDropdown.Item className='theme-text-grey'>Products</NavDropdown.Item>
                                 </LinkContainer>
                                 <LinkContainer to='/admin/userlist'>
-                                <NavDropdown.Item>Users</NavDropdown.Item>
+                                <NavDropdown.Item className='theme-text-grey'>Users</NavDropdown.Item>
                                 </LinkContainer>
                                 <LinkContainer to='/admin/orderlist'>
-                                <NavDropdown.Item>Orders</NavDropdown.Item>
+                                <NavDropdown.Item className='theme-text-grey'>Orders</NavDropdown.Item>
                                 </LinkContainer>
                             </NavDropdown>
                         )}

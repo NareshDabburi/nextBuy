@@ -50,8 +50,8 @@ const PlaceOrderScreen = () => {
         <Col md={8}>
         <ListGroup variant='flush'>
             <ListGroup.Item>
-                <h2>Shipping</h2>
-                <p>
+                <div className="theme-heading theme-text-dark-green">Order Details</div>
+                <p className='theme-text-grey'>
                     <strong>Address: </strong>
                     {cart.shippingAddress.address}, {' '}
                     {cart.shippingAddress.city},{' '}
@@ -59,27 +59,27 @@ const PlaceOrderScreen = () => {
                     {cart.shippingAddress.country}
                 </p>
             </ListGroup.Item>
-            <ListGroup.Item>
+            <ListGroup.Item className='theme-text-grey'>
                 <h2>Payment Method</h2>
                 <p>
                     <strong>Method: </strong>
                     {cart.paymentMethod}
                 </p>
             </ListGroup.Item>
-            <ListGroup.Item>
+            <ListGroup.Item className='theme-text-grey'>
                 <h2>Order Items</h2>
                 {cart.cartItems.length ===0 ? (
-                    <Message>Your cart is empty</Message>
+                    <Message className='theme-text-grey'>Your cart is empty</Message>
                 ):(
                     <ListGroup variant='flush'>
                         {cart.cartItems.map((item,index)=>(
                             <ListGroup.Item key={index}>
-                                <Row>
+                                <Row className='theme-text-grey'>
                                     <Col md={1}>
                                         <Image src={item.image} alt='item.name' fluid rounded/>
                                     </Col>
                                     <Col>
-                                        <Link to={`product/${item.product}`}>{item.name}</Link>
+                                        <Link to={`/product/${item._id}`}>{item.name}</Link>
                                     </Col>
                                     <Col md={4}>
                                         {item.qty} x {item.price} = ${item.qty * item.price}
@@ -93,40 +93,40 @@ const PlaceOrderScreen = () => {
         </ListGroup>
         </Col>
         <Col md={4}>
-                <Card>
+                <Card >
                     <ListGroup variant='flush'>
                         <ListGroup.Item>
-                            <h2>Order Summary</h2>
+                            <h2 className='theme-text-grey'>Order Summary</h2>
                         </ListGroup.Item>
-                        <ListGroup.Item>
-                            <Row>
+                        <ListGroup.Item >
+                            <Row className='theme-text-grey'>
                                 <Col>Items:</Col>
                                 <Col>${cart.itemsPrice}</Col>
                             </Row>
                         </ListGroup.Item>
                         <ListGroup.Item>
-                            <Row>
+                            <Row className='theme-text-grey'>
                                 <Col>Shipping:</Col>
                                 <Col>${cart.shippingPrice}</Col>
                             </Row>
                         </ListGroup.Item>
                         <ListGroup.Item>
-                            <Row>
+                            <Row className='theme-text-grey'>
                                 <Col>Tax:</Col>
                                 <Col>${cart.taxPrice}</Col>
                             </Row>
                         </ListGroup.Item>
                         <ListGroup.Item>
-                            <Row>
+                            <Row className='theme-text-grey'>
                                 <Col>Total:</Col>
                                 <Col>${cart.totalPrice}</Col>
                             </Row>
                         </ListGroup.Item>
+                        {error && <ListGroup.Item>
+                             <Message variant='danger'>{error.data.message}</Message>
+                        </ListGroup.Item>}
                         <ListGroup.Item>
-                            {error && <Message variant='danger'>{error.data.message}</Message>}
-                        </ListGroup.Item>
-                        <ListGroup.Item>
-                            <Button type="button" className='btn-block' disabled={cart.cartItems.length ===0} onClick={placeOrderHandler}>Place Order</Button>
+                            <Button  className='theme-btn'  type="button" disabled={cart.cartItems.length ===0} onClick={placeOrderHandler}>Place Order</Button>
                             {isLoading && <Loader/>}
                         </ListGroup.Item>
                     </ListGroup>

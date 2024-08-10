@@ -53,13 +53,12 @@ const OrderScreen = () => {
     function onApprove(data,actions){
       return actions.order.capture().then(async function(details){
         try{
-          await payOrder({orderId,details});
+          await payOrder({orderId,details}).unwrap();
           refetch();
           toast.success("Payment successfull");
         }
         catch(error){
           toast.error(error?.data?.message || error.message )
-
         }
       })
 
@@ -83,26 +82,30 @@ const OrderScreen = () => {
 
     const deliverOrderHandler = async()=>{
       try{
-        await deliverOrder(orderId);
+        const response = await deliverOrder(orderId);
+        console.log(response);
+        if(response.error){
+          toast.error(response.error?.data?.message || response.error?.message )
+          return;
+        }
         refetch();
         toast.success("Order delivered");
-
       }
-      catch(err){
-        toast.error(err?.data?.message || err?.message);
+      catch(error){
+        toast.error(error?.data?.message || error.message )
       }
 
     }
     
   return isLoading ? <Loader/> : error ? <Message variant="danger">{error?.data?.message}</Message> : (
   <>
-  <h1>Order {order._id}</h1>
-  <Row>
+  <div className="theme-heading theme-text-dark-green">Order {order._id}</div>
+  <Row >
     <Col md={8}>
       <ListGroup variant='flush'>
-        <ListGroup.Item>
-          <h2>Shipping</h2>
-          <p>
+        <ListGroup.Item className='theme-text-grey'>
+          <h2 className='font-bold text-xl'>Shipping</h2>
+          <p >
             <strong>Name:</strong>{order.user.name}
           </p>
           <p>
@@ -121,8 +124,8 @@ const OrderScreen = () => {
             ):(<Message variant='danger'>Not Delivered</Message>)}
           </p>
         </ListGroup.Item>
-        <ListGroup.Item>
-          <h2>Payment Method</h2>
+        <ListGroup.Item className='theme-text-grey'>
+          <h2 className='font-bold text-xl'>Payment Method</h2>
           <p>
             <strong>Method:</strong>
             {order.paymentMethod}
@@ -133,11 +136,11 @@ const OrderScreen = () => {
             ):(<Message variant='danger'>Not Paid</Message>)}
           </p>
         </ListGroup.Item>
-        <ListGroup.Item>
-            <h2>Order Item</h2>
+        <ListGroup.Item className='theme-text-grey'>
+            <h2 className='font-bold text-xl'>Order Item</h2>
             {order.orderItems.map((item,index)=>(
               <ListGroup.Item key={index}>
-                <Row>
+                <Row className='theme-text-grey'>
                   <Col md={1}>
                   <Image src={item.image} alt={item.name} fluid rounded/>
                   </Col>
@@ -156,10 +159,10 @@ const OrderScreen = () => {
     <Col md={4}>
     <Card>
       <ListGroup>
-        <ListGroup.Item>
+        <ListGroup.Item className='theme-text-grey'>
           <h2>Order Summary</h2>
         </ListGroup.Item>
-        <ListGroup.Item>
+        <ListGroup.Item className='theme-text-grey'>
           <Row>
             <Col>Items</Col>
             <Col>${order.itemsPrice}</Col>
@@ -182,7 +185,7 @@ const OrderScreen = () => {
             {loadingPay && <Loader/>}
             {isPending ? <Loader/> : (
               <div>
-                <Button onClick={onApproveTest} style={{marginBottom:'10px'}}>Test Pay Button</Button>
+                <Button className='theme-btn' onClick={onApproveTest} style={{marginBottom:'10px'}}>Test Pay Button</Button>
                 <div>
                   <PayPalButtons createOrder={createOrder} onApprove={onApprove} onError={onError}></PayPalButtons>
                 </div>
@@ -194,7 +197,7 @@ const OrderScreen = () => {
 
         {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
           <ListGroupItem>
-            <Button type='button' className='btn btn-block' onClick={deliverOrderHandler}>Mark as Delivered</Button>
+            <Button type='button' className='btn btn-block theme-btn' onClick={deliverOrderHandler}>Mark as Delivered</Button>
           </ListGroupItem>
         )}
       </ListGroup>

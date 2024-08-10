@@ -43,9 +43,9 @@ const LoginScreen = () => {
     }
 
   return (
-    <FormContainer>
-        <h1>Sign In</h1>
-        <Form onSubmit = {submitHandler}>
+    <div className=" w-1/2 p-4 mx-auto shadow-lg relative theme-text-dark-green" style={{ background: 'linear-gradient(200deg,#22543d 10%,#FFFFFF 90%)'}}>
+        <div className="theme-heading">Sign In</div>
+        <Form onSubmit = {submitHandler} >
             <Form.Group controlId="email" className="my-3">
                 <Form.Label>Email Address</Form.Label>
                 <Form.Control type="email" placeholder="Email Address" value = {email} onChange={(e)=>setEmail(e.target.value)}></Form.Control>
@@ -54,7 +54,7 @@ const LoginScreen = () => {
                 <Form.Label>Password</Form.Label>
                 <Form.Control type="password" placeholder="Enter Password" value = {password} onChange={(e)=>setPassword(e.target.value)}></Form.Control>
             </Form.Group>
-            <Button type='submit'variant="primary" className="mt-2" disabled={isLoading}>Sign In</Button>
+            <Button type='submit'variant="primary" className="mt-2 theme-btn" disabled={isLoading}>Sign In</Button>
             {isLoading && <Loader/>}
         </Form>
         <Row className="py-3">
@@ -62,7 +62,7 @@ const LoginScreen = () => {
             New Customer ? <Link to={redirect ? `/register?redirect=${redirect}`:"/register"}>Register</Link>
             </Col>
         </Row>
-    </FormContainer>
+    </div>
   )
 }
 

@@ -28,10 +28,11 @@ const CartScreen = () => {
   return (
     <Row>
         <Col md={8}>
-            <h1 style={{marginBotton : '20px'}}>Shopping Cart</h1>
+            
+            <div className="theme-heading theme-text-dark-green mb-20 ">Your Cart</div>
             {cartItems.length === 0 ? (
                 <Message >
-                    Your cart is Empty <Link to="/">Go Back</Link>
+                    Your cart is Empty <Link className='underline theme-text-green ' to="/">Go Back</Link>
                 </Message>
             ) : (
                 <ListGroup variant='flush'>
@@ -39,16 +40,16 @@ const CartScreen = () => {
                         <ListGroup.Item key={item._id}>
                             <Row>
                                 <Col md={2}>
-                                <Image src={item.image} alt = {item.name} fluid rounded/>
+                                <Image  src={item.image} alt = {item.name} fluid rounded/>
                                 </Col>
                                 <Col md={3}>
-                                <Link to = {`/product/${item._id}`}>{item.name}</Link>
+                                <Link to = {`/product/${item._id}`} className='theme-text-grey'>{item.name}</Link>
+                                </Col>
+                                <Col md={2} className='theme-text-grey'>
+                                ${item.price}
                                 </Col>
                                 <Col md={2}>
-                                {item.price}
-                                </Col>
-                                <Col md={2}>
-                                <Form.Control as="select" value={item.qty} onChange={(e)=>addToCartHandler(item,Number(e.target.value))}>
+                                <Form.Control as="select" className='theme-text-grey' value={item.qty} onChange={(e)=>addToCartHandler(item,Number(e.target.value))}>
                                         {[...Array(item.countInStock).keys() ].map((x)=>(
                                             <option key={x+1} value={x+1}>{x+1}
                                             </option>
@@ -70,12 +71,12 @@ const CartScreen = () => {
             <Card>
                 <ListGroup variant='flush'>
                     <ListGroup.Item>
-                        <h2>SubTotal({cartItems.reduce((acc,item)=>acc+item.qty,0)}) items</h2>
-                        ${cartItems.reduce((acc,item)=>acc+ (item.qty * item.price),0).toFixed(2)}
+                        <h2 className='theme-text-grey'>SubTotal({cartItems.reduce((acc,item)=>acc+item.qty,0)}) items</h2>
+                        <div className='theme-text-grey'>${cartItems.reduce((acc,item)=>acc+ (item.qty * item.price),0).toFixed(2)}</div>
 
                     </ListGroup.Item>
                     <ListGroup.Item>
-                        <Button type="button" className='btn-block' disabled={cartItems.length === 0} onClick = {checkOutHandler}>
+                        <Button type="button" className='theme-btn' disabled={cartItems.length === 0} onClick = {checkOutHandler}>
                             Procced to Checkout
                         </Button>
                     </ListGroup.Item>
