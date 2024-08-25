@@ -10,6 +10,7 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
+      console.log(action.payload);
       const item = action.payload;
       const existsItem = state.cartItems.find((x) => x._id === item._id);
       if (existsItem) {
@@ -19,6 +20,16 @@ const cartSlice = createSlice({
       } else {
         state.cartItems = [...state.cartItems, item];
       }
+      console.log("ADDTOCART", state.cartItems);
+      return updateCart(state);
+    },
+    initializeCartItems: (state, action) => {
+      state = {
+        cartItems: [],
+        shippingAddress: {},
+        paymentMethod: "PayPal",
+      };
+      state.cartItems = action.payload;
       return updateCart(state);
     },
     removeFromCart: (state, action) => {
@@ -42,6 +53,7 @@ const cartSlice = createSlice({
 
 export const {
   addToCart,
+  initializeCartItems,
   removeFromCart,
   saveShippingAddress,
   savePaymentMethod,

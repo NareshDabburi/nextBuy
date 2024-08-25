@@ -1,5 +1,4 @@
 import {LinkContainer} from "react-router-bootstrap";
-import {Table,Button} from "react-bootstrap";
 import{FaTimes} from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
@@ -12,7 +11,7 @@ const OrderListScreen = () => {
   console.log(orders);
   return (
     <>
-      <div className="theme-heading theme-text-dark-green">Order</div>
+      <div className="theme-heading theme-text-dark-green mt-4 mb-2">Orders</div>
       {isLoading ? <Loader/> : error ? <Message variant='danger'>{error}</Message>:(
         // <Table striped hover responsive className="table-sm">
         //   <thead>

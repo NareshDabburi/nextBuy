@@ -1,35 +1,47 @@
 import React from 'react'
 import {Navbar,Nav,Container,Badge, NavDropdown} from 'react-bootstrap';
-import {FaShoppingCart, FaUser} from 'react-icons/fa';
+import {FaShoppingCart, FaUser,FaRegHeart} from 'react-icons/fa';
 import {LinkContainer} from "react-router-bootstrap";
 import logo1 from "../assets/logo-1.png"
 import {useSelector,useDispatch} from "react-redux";
 import { useLogoutMutation } from '../slices/userApiSlice';
+import {useSaveCartItemsMutation,useSaveWishListItemsMutation} from "../slices/productsApiSlice";
 import {logout} from "../slices/authSlice";
 import { useNavigate } from 'react-router-dom';
 import { resetCart } from '../slices/cartSlice';
+import {resetWishlist} from '../slices/wishlistSlice';
 
 
 const Header = () => {
     const{cartItems} = useSelector((state)=>state.cart);
     const {userInfo} = useSelector((state)=>state.auth);
+    const {wishlistItems} = useSelector((state)=>state.wishlist);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [logOutApiCall] = useLogoutMutation();
+    const [saveCartItems] = useSaveCartItemsMutation();
+    const [saveWishListItems] = useSaveWishListItemsMutation();
 
     const logoutHandler = async()=>{
         try{
+        if(cartItems && cartItems.length>0){
+            await saveCartItems(cartItems).unwrap();
+        }
+        if(wishlistItems && wishlistItems.length>0){
+            await saveWishListItems(wishlistItems).unwrap();
+        }
+        
         await logOutApiCall().unwrap();
         dispatch(logout());
         // dispatch(clearCartItems());
         dispatch(resetCart());
+        dispatch(resetWishlist());
         navigate("/login");
         }catch(err){
             console.log(err);
         }
-
     }
 
   return (
@@ -50,14 +62,20 @@ const Header = () => {
                     <Nav className='ms-auto'>
                         
                         <LinkContainer to="/cart" className='flex theme-white'>
-                            <Nav.Link href="/cart" ><FaShoppingCart className='m-1 '/>
-                            <div>Cart</div>
+                            <Nav.Link href="/cart" ><FaShoppingCart className='m-1 '/>                       
                                 {cartItems?.length >0 && (
-                                    <Badge  className='ml-1'>
+                                    <Badge  className=''>
                                        {cartItems.reduce((a,c)=> a+c.qty,0)}
                                     </Badge>)}
                             </Nav.Link>
                         </LinkContainer>
+
+                        
+                        <LinkContainer to="/wishlist" className='flex theme-white'>
+                            <Nav.Link href="/wishlist" ><FaRegHeart className='m-1 '/>
+                            </Nav.Link>
+                        </LinkContainer>
+                        
                         
                         {userInfo ? 
                         (

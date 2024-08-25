@@ -1,5 +1,5 @@
 import {useState,useEffect} from "react";
-import {Table,Form,Button,Row,Col} from "react-bootstrap";
+import {Form,Button,Row,Col} from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import {toast} from 'react-toastify';
 import Loader from '../components/Loader';
@@ -45,7 +45,7 @@ const ProfileScreen = () => {
     }
 
   return (
-    <Row>
+    <Row className="mt-4 mb-2">
         <Col md={3}>
         <div className="theme-heading theme-text-dark-green">User Profile</div>
         <Form onSubmit={submitHandler} className='theme-text-grey'>

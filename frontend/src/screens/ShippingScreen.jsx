@@ -22,16 +22,14 @@ const ShippingScreen = () => {
     const checkOutHandler = (e)=>{
         e.preventDefault();
         dispatch(saveShippingAddress({address,city,postalCode,country}));
-        navigate("/payment");
+        //navigate("/payment");
+        navigate("/placeorder");
     }
-
-    
-
   return (
-    <Row>
+    <Row >
+        <CheckoutSteps step1 step2 />
         <Col md={8}>
             <FormContainer>
-                <CheckoutSteps step1 step2 />
                 <div className="theme-heading theme-text-dark-green">Shipping Address</div>
                 <Form className='theme-text-grey'>
                     <Form.Group controlId='address' className='my-2'>
@@ -54,7 +52,7 @@ const ShippingScreen = () => {
                 </Form>
             </FormContainer>
         </Col> 
-        <Col md={4}>
+        <Col md={4} className='mt-4'>
             <Card>
                 <ListGroup variant='flush'>
                     <ListGroup.Item>

@@ -33,4 +33,5 @@
     .theme-btn{
        @apply theme-green hover:cursor-pointer hover:bg-green-950 text-white hover:text-white
     }
+    
 }

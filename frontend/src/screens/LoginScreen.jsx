@@ -1,12 +1,13 @@
 import {useState,useEffect} from "react";
 import {Link,useLocation,useNavigate} from "react-router-dom";
 import{Form,Button,Row,Col} from "react-bootstrap";
-import FormContainer from "../components/FormContainer";
 import { useDispatch,useSelector } from "react-redux";
 import Loader from "../components/Loader";
 import { useLoginMutation } from "../slices/userApiSlice";
 import { setCredential } from "../slices/authSlice";
 import { toast } from "react-toastify";
+import {initializeCartItems} from "../slices/cartSlice";
+import {initializeWishlistItems} from "../slices/wishlistSlice";
 
 const LoginScreen = () => {
     const[email,setEmail] = useState('');
@@ -18,6 +19,7 @@ const LoginScreen = () => {
     const [login,{isLoading}] = useLoginMutation();
 
     const {userInfo} = useSelector((state)=>state.auth);
+    
 
     const {search} = useLocation();
     const sp = new URLSearchParams(search);
@@ -34,7 +36,10 @@ const LoginScreen = () => {
         e.preventDefault();
         try{
             const res = await login({email,password}).unwrap();
+            
             dispatch(setCredential({...res,}));
+            dispatch(initializeCartItems(res.cartItems));
+            dispatch(initializeWishlistItems(res.wishlistItems));
             navigate(redirect)
 
         }catch(err){

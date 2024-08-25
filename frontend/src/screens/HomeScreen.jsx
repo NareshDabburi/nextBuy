@@ -11,7 +11,6 @@ import ProductCarosel from '../components/ProductCarosel';
 const HomeScreen = () => {
   const {pageNumber,keyword} = useParams();
   const {data ,isLoading,error} = useGetProductsQuery({keyword,pageNumber});
-  
 
   return (
     <>

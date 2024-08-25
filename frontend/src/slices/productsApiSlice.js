@@ -1,4 +1,4 @@
-import { PRODUCT_URL } from "../constants";
+import { PRODUCT_URL, WISHLIST_URL, USERS_URL } from "../constants";
 import { apiSlice } from "./apiSlices";
 import { UPLOAD_URL } from "../constants";
 
@@ -63,6 +63,29 @@ export const productApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,
     }),
+    saveCartItems: builder.mutation({
+      query: (data) => ({
+        url: `${PRODUCT_URL}/saveCart`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Product"],
+    }),
+    getLoggedInUserCartItems: builder.query({
+      query: () => ({
+        url: `${PRODUCT_URL}/getCart`,
+      }),
+      keepUnusedDataFor: 5,
+    }),
+    saveWishListItems: builder.mutation({
+      query: (data) => ({
+        url: `${WISHLIST_URL}/addToWishlist`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Product"],
+    }),
+    getLoggedInUserWishListItems: builder.query({}),
   }),
 });
 export const {
@@ -74,4 +97,8 @@ export const {
   useDeleteProductMutation,
   useCreateReviewMutation,
   useGetTopProductsQuery,
+  useSaveCartItemsMutation,
+  useGetLoggedInUserCartItemsQuery,
+  useSaveWishListItemsMutation,
+  useGetLoggedInUserWishListItemsQuery,
 } = productApiSlice;

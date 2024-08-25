@@ -11,8 +11,10 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredential: (state, action) => {
-      state.userInfo = action.payload;
-      localStorage.setItem("userInfo", JSON.stringify(action.payload));
+      const { name, email, isAdmin } = action.payload;
+      const userInfo = { name, email, isAdmin };
+      state.userInfo = userInfo;
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
     },
     register: () => {},
     logout: (state, action) => {

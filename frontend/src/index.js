@@ -28,6 +28,7 @@ import ProductListScreen from "./screens/admin/ProductListScreen";
 import ProductEditScreen from "./screens/admin/ProductEditScreen";
 import UserListScreen from "./screens/admin/UserListScreen";
 import UserEditScreen from "./screens/admin/UserEditScreen";
+import WishListScreen from "./screens/WishListScreen";
 import { Provider } from "react-redux";
 import store from "./store";
 import { HelmetProvider } from "react-helmet-async";
@@ -45,6 +46,7 @@ const router = createBrowserRouter(
 
       <Route path="/product/:id" element={<ProductScreen />}></Route>
       <Route path="/cart" element={<CartScreen />}></Route>
+
       <Route path="/login" element={<LoginScreen />}></Route>
       <Route path="/register" element={<RegisterScreen />}></Route>
 
@@ -54,6 +56,7 @@ const router = createBrowserRouter(
         <Route path="/placeorder" element={<PlaceOrderScreen />}></Route>
         <Route path="/orders/:id" element={<OrderScreen />}></Route>
         <Route path="/profile" element={<ProfileScreen />}></Route>
+        <Route path="/wishlist" element={<WishListScreen />}></Route>
       </Route>
       <Route path="" element={<AdminRoute />}>
         <Route path="/admin/orderlist" element={<OrderListScreen />}></Route>

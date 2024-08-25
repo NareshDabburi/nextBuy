@@ -31,5 +31,7 @@ router.post(
   productController.createProductReview
 );
 router.get("/top", productController.getTopProducts);
+router.post("/saveCart", authMiddleWare.protect, productController.saveCart);
+router.get("/getCart", authMiddleWare.protect, productController.getCart);
 
 module.exports = router;

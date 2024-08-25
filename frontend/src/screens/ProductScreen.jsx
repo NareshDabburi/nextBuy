@@ -25,7 +25,18 @@ function ProductScreen() {
     const{userInfo} = useSelector((state)=>state.auth);
 
     const addToCartHandler = ()=>{
-        dispatch(addToCart({...product,qty}))
+        const {_id,name,image,price,category,brand,description,countInStock} = product;
+        const addProduct = {
+            _id,
+            name,
+            image,
+            price,
+            category,
+            brand,
+            description,
+            countInStock
+        }
+        dispatch(addToCart({...addProduct,qty}))
         navigate("/cart");
     }
     const submitHandler = async(e)=>{
@@ -48,7 +59,7 @@ function ProductScreen() {
 
   return (
     <>
-   <Button className='theme-btn p-2 mt-2 mb-2'><Link className='text-lg' to='/'>Go Back</Link></Button>
+   {/* <Button className='theme-btn p-2 mt-2 mb-2'><Link className='text-lg' to='/'>Go Back</Link></Button> */}
 
     
     {isLoading ? 
@@ -57,7 +68,7 @@ function ProductScreen() {
     (
         <>
             <Meta title={product.name}/>
-            <Row>
+            <Row className='mt-4'>
                 <Col md={5}>
                 <Image src={product.image} alt = {product.name} fluid></Image>
                 </Col>

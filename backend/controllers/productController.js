@@ -1,8 +1,9 @@
 const products = require("../data/products");
 const productModel = require("../models/productModel");
+const cartModel = require("../models/cartModel");
 const asyncHandler = require("express-async-handler");
 //@desc fetch all products
-// api path /api/products/getAllProducts
+// api path /api/products/cartModel
 exports.getAllProducts = asyncHandler(async (req, res) => {
   const pageSize = process.env.PAGINATION_LIMIT;
   const page = Number(req.query.pageNumber) || 1;
@@ -60,7 +61,7 @@ exports.updateProduct = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Product Not Found");
   }
-  console.log(product);
+
   product.name = req.body.name;
   product.price = req.body.price;
   product.description = req.body.description;
@@ -110,7 +111,7 @@ exports.createProductReview = asyncHandler(async (req, res) => {
       comment,
       user: req.user._id,
     };
-    console.log("review =====", review);
+
     product.reviews.push(review);
 
     product.numReviews = product.reviews.length;
@@ -133,4 +134,37 @@ exports.createProductReview = asyncHandler(async (req, res) => {
 exports.getTopProducts = asyncHandler(async (req, res) => {
   const products = await productModel.find({}).sort({ rating: -1 }).limit(3);
   res.status(200).json(products);
+});
+
+//@desc POST save cart items
+//@route POST /api/products/saveCart
+//@access private
+exports.saveCart = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  console.log("IN");
+  const existingCart = await cartModel.findOne({ user: req.user._id });
+  console.log(existingCart);
+  if (existingCart) {
+    existingCart.cartItems = req.body;
+    const saveCartItems = await existingCart.save();
+    res.status(200).json(saveCartItems);
+  } else {
+    const cart = new cartModel({
+      user: req.user._id,
+      cartItems: req.body,
+    });
+    //const isCartExists = await cartModel.findOne({ user: req.user._id });
+
+    const saveCartItems = cart.save();
+    res.status(200).json(saveCartItems);
+  }
+});
+
+//@desc GET get saved cart items
+//@route POST /api/products/getCart
+//@access private
+exports.getCart = asyncHandler(async (req, res) => {
+  const cart = await cartModel.findOne({ user: req.user._id }).sort({ _id: 1 });
+  const cartItems = cart?.cartItems;
+  res.status(200).json(cartItems);
 });

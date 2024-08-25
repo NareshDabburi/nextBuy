@@ -1,6 +1,6 @@
 import {LinkContainer} from "react-router-bootstrap";
-import {Table,Button,Row,Col} from "react-bootstrap";
-import{FaEdit,FaTrash} from 'react-icons/fa';
+import {Button} from "react-bootstrap";
+import{FaEdit} from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import { useGetProductsQuery,useCreateProductMutation,useDeleteProductMutation } from "../../slices/productsApiSlice"; 
@@ -53,7 +53,7 @@ const ProductListScreen = () => {
         </Button>
         </Col>
     </Row>  */}
-    <div className="flex justify-between pb-4">
+    <div className="flex justify-between pb-4 mt-4">
         <div className="theme-heading theme-text-dark-green">
             Products
         </div>

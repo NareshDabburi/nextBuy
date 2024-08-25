@@ -70,15 +70,15 @@ const ProductEditScreen = () => {
     }
   return (
     <>
-    <Link to="/admin/productlist" className="btn btn-light my-3">
+    <Link to="/admin/productlist" className=" btn theme-btn my-3">
         Go Back
     </Link>
     <FormContainer>
-        <h1>Edit Product</h1>
+        <div className="theme-heading theme-text-dark-green mb-2">Edit Product</div>
         {loadingUpdate && <Loader/>}
         {loadingUpload && <Loader/>}
         {isLoading ? <Loader/> : error ? <Message variant='danger'>{error.data.message}</Message> : (
-            <Form onSubmit={submitHandler}>
+            <Form onSubmit={submitHandler} className="theme-text-grey">
                 <Form.Group controlId="name">
                     <Form.Label>Name</Form.Label>
                     <Form.Control type='name' placeholder="Enter name" value={name} onChange={(e)=>setName(e.target.value)}></Form.Control>
@@ -108,7 +108,7 @@ const ProductEditScreen = () => {
                     <Form.Label>Description</Form.Label>
                     <Form.Control type='text' placeholder="Enter description" value={description} onChange={(e)=>setDescription(e.target.value)}></Form.Control>
                 </Form.Group>
-                <Button type='submit' variant="primary">Update</Button>
+                <Button type='submit' className="theme-btn">Update</Button>
             </Form>
         )}
     </FormContainer>

@@ -1,6 +1,6 @@
 import {LinkContainer} from "react-router-bootstrap";
-import {Table,Button} from "react-bootstrap";
-import{FaTimes,FaTrash,FaEdit,FaCheck} from 'react-icons/fa';
+import {Button} from "react-bootstrap";
+import{FaTrash,FaEdit} from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import {useGetUsersQuery,useDelteUsersMutation} from '../../slices/userApiSlice';
@@ -24,7 +24,7 @@ const UserListScreen = () => {
     }
   return (
     <>
-    <div className="theme-heading theme-text-dark-green">Users</div>
+    <div className="theme-heading theme-text-dark-green mt-4 mb-2 ">Users</div>
     {loadingDelete && <Loader/>}
     {isLoading ? (<Loader/>) : error ? (<Message variant='danger'>{error}</Message>):(<>
         {/* <Table striped hover responsive className="table=sm">

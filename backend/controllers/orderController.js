@@ -104,7 +104,6 @@ exports.getMyOrders = asyncHandler(async (req, res) => {
 // GET /api/orders/:id
 // @access Private
 exports.getOderById = asyncHandler(async (req, res) => {
-  console.log(req.params.id);
   const order = await Order.findById(req.params.id).populate(
     "user",
     "name email"

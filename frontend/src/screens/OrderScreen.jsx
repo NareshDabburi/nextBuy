@@ -61,7 +61,6 @@ const OrderScreen = () => {
           toast.error(error?.data?.message || error.message )
         }
       })
-
     }
     function createOrder(data,actions){
       return actions.order.create({
@@ -99,7 +98,7 @@ const OrderScreen = () => {
     
   return isLoading ? <Loader/> : error ? <Message variant="danger">{error?.data?.message}</Message> : (
   <>
-  <div className="theme-heading theme-text-dark-green">Order {order._id}</div>
+  <div className="theme-heading theme-text-dark-green mt-2" >Order {order._id}</div>
   <Row >
     <Col md={8}>
       <ListGroup variant='flush'>

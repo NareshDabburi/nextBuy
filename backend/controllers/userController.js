@@ -4,7 +4,10 @@ const userModel = require("../models/userModel");
 const { bgCyan } = require("colors");
 const bcrypt = require("bcrypt");
 const generateToken = require("../utils/generateToken");
+const cartModel = require("../models/cartModel");
+const wishlistModel = require("../models/wishListModel");
 const { use } = require("../routes/productRoute");
+
 //@desc Login User
 //@route POST /api/users/register
 //@access public
@@ -29,11 +32,24 @@ exports.authUser = asyncHandler(async (req, res) => {
 
   generateToken(res, user._id);
 
+  // check if this user has cart Items
+  const cart = await cartModel.findOne({ user: user._id }).sort({ _id: 1 });
+  const cartItems = cart?.cartItems || [];
+
+  //check if this user has whishlist items
+
+  const wishList = await wishlistModel
+    .findOne({ user: user._id })
+    .sort({ _id: 1 });
+  const wishlistItems = wishList?.wishlistItems;
+
   res.status(200).json({
     _id: user._id,
     name: user.name,
     email: user.email,
     isAdmin: user.isAdmin,
+    cartItems,
+    wishlistItems,
   });
 });
 
@@ -96,7 +112,6 @@ exports.getUserProfile = asyncHandler(async (req, res) => {
 //@route PUT /api/users/profile
 //@access Private
 exports.updateUserProfile = asyncHandler(async (req, res) => {
-  console.log(res.body);
   const user = await userModel.findById(req.user._id);
   if (!user) {
     res.status(400);
@@ -144,7 +159,6 @@ exports.getUserById = asyncHandler(async (req, res) => {
 //@route PUT /api/users/:id
 //@access Private/Admin
 exports.updateUser = asyncHandler(async (req, res) => {
-  console.log(req);
   const user = await userModel.findById(req.params.id);
   if (!user) {
     res.status(404);
