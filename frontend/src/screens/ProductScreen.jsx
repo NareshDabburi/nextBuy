@@ -25,11 +25,11 @@ function ProductScreen() {
     const{userInfo} = useSelector((state)=>state.auth);
 
     const addToCartHandler = ()=>{
-        const {_id,name,image,price,category,brand,description,countInStock} = product;
+        const {_id,name,images,price,category,brand,description,countInStock} = product;
         const addProduct = {
             _id,
             name,
-            image,
+            images,
             price,
             category,
             brand,

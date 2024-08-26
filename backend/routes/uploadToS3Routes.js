@@ -3,13 +3,10 @@ const router = express.Router();
 const path = require("path");
 const multer = require("multer");
 const asyncHandler = require("express-async-handler");
-const {
-  S3Client,
-  PutObjectCommand,
-  GetObjectCommand,
-} = require("@aws-sdk/client-s3");
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 const sharp = require("sharp");
-// Configure the AWS SDK with your credentials and region
+
+// Configure AWS SDK
 const bucketName = process.env.AWS_S3_BUCKET_NAME;
 const bucketRegion = process.env.AWS_S3_BUCKET_REGION;
 const accessKey = process.env.AWS_S3_ACCESS_KEY;
@@ -23,7 +20,7 @@ const s3 = new S3Client({
   region: bucketRegion,
 });
 
-//check fileTpe
+// Check file type
 function checkFileType(file, cb) {
   const filetypes = /jpg|jpeg|png/;
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
@@ -32,56 +29,81 @@ function checkFileType(file, cb) {
   if (extname && mimetype) {
     return cb(null, true);
   } else {
-    cb({ message: "Images only!" });
+    cb(new Error("Images only!"));
   }
 }
 
-const storage = multer.memoryStorage();
+// Configure multer
+const storage = multer.memoryStorage(); // In-memory storage
 const upload = multer({
   storage: storage,
   fileFilter: function (req, file, cb) {
-    checkFileType(file, cb);
+    checkFileType(file, cb); // Validate file type
   },
 });
 
 router.post(
   "/",
-  upload.single("image"),
+  upload.array("images", 5),
   asyncHandler(async (req, res) => {
-    console.log(req.file);
-    const fileName = `${req.file.fieldname}-${Date.now()}${path.extname(
-      req.file.originalname
-    )}`;
-    console.log(fileName);
+    const imageUrls = [];
+    console.log("ENTERED");
 
-    //const buffer = await sharp(req.file.buffer).toBuffer();
-
-    const buffer = await sharp(req.file.buffer)
-      .resize({ height: 1920, widht: 1080, fit: "contain" })
-      .toBuffer();
-
-    const params = {
-      Bucket: `${bucketName}`,
-      Key: `productImages/${fileName}`,
-      Body: buffer,
-      ContentType: req.file.mimetype,
-    };
-    const command = new PutObjectCommand(params);
-    const response = await s3.send(command);
-
-    console.log("RESPONSE", response);
-
-    if (response.$metadata.httpStatusCode === 200) {
-      res.send({
-        message: "Image uploaded to S3 successfully",
-        //image: `uploads/${fileName}`,
-        image: `${process.env.AWS_S3_URL}/${fileName}`,
-      });
-    } else {
-      res.status(500).send({
-        message: "Image uploaded to S3 was unsuccessful",
-      });
+    // Check if files exist
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).send({ message: "No files uploaded." });
     }
+
+    for (const file of req.files) {
+      const fileName = `${file.fieldname}-${Date.now()}-${Math.round(
+        Math.random() * 1e9
+      )}${path.extname(file.originalname)}`;
+      console.log("Processing file:", fileName);
+
+      try {
+        // Print buffer length to debug if buffers are different
+        console.log("Buffer length:", file.buffer.length);
+
+        // Process image with sharp
+        const buffer = await sharp(file.buffer)
+          .resize({ height: 1920, width: 1080, fit: "contain" }) // Corrected typo
+          .flatten({ background: { r: 128, g: 128, b: 128 } }) // Add background color
+          .toBuffer();
+
+        // Print processed buffer length to ensure it is being processed
+        console.log("Processed buffer length:", buffer.length);
+
+        const params = {
+          Bucket: bucketName,
+          Key: `productImages/${fileName}`,
+          Body: buffer,
+          ContentType: file.mimetype, // Use file.mimetype
+        };
+
+        const command = new PutObjectCommand(params);
+        const response = await s3.send(command);
+
+        console.log("S3 RESPONSE====", response);
+
+        if (response.$metadata.httpStatusCode === 200) {
+          imageUrls.push(`${process.env.AWS_S3_URL}/${fileName}`);
+        } else {
+          console.error("Image upload failed", response);
+          return res
+            .status(500)
+            .send({ message: "Image upload to S3 was unsuccessful." });
+        }
+      } catch (error) {
+        console.error("Error processing file:", error);
+        return res.status(500).send({ message: "Error processing file." });
+      }
+    }
+
+    res.send({
+      message: "Images uploaded to S3 successfully",
+      image: imageUrls[0],
+      images: imageUrls,
+    });
   })
 );
 

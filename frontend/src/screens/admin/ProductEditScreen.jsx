@@ -12,6 +12,7 @@ const ProductEditScreen = () => {
     const[name,setName] = useState("");
     const[price,setPrice] = useState(0);
     const[image,setImage] = useState("");
+    const[images,setImages] = useState([]);
     const[brand,setBrand] = useState("");
     const[category,setCategory] = useState("");
     const[countInStock,setCountInStock] = useState(0);
@@ -27,6 +28,7 @@ const ProductEditScreen = () => {
             setName(product.name);
             setPrice(product.price);
             setImage(product.image);
+            setImages(product.images || []);
             setBrand(product.brand);
             setCategory(product.category);
             setCountInStock(product.countInStock);
@@ -40,6 +42,7 @@ const ProductEditScreen = () => {
             productId,
             name,
             price,
+            images,
             image,
             brand,
             category,
@@ -54,14 +57,30 @@ const ProductEditScreen = () => {
             navigate('/admin/productlist');
         }
     }
-    const uploadFileHandler =async (e)=>{
+    const uploadFileHandler = async (e)=>{
+        e.preventDefault(); 
         const formData = new FormData();
+
+        if (e.target.files.length === 0) {
+            toast.error("No files selected.");
+        return;
+        }
+
+        if (e.target.files.length >= 6) {
+            toast.error("Please upload upto 5 images only");
+            return;
+        }
         
-        formData.append('image',e.target.files[0]);
-        console.log(e.target.files[0]);
+        //formData.append('image',e.target.files[0]);
+        for (let i = 0; i < e.target.files.length; i++) {
+            formData.append('images', e.target.files[i]);
+        }
+        
         try{
             const res = await uploadProductImage(formData).unwrap();
+            console.log(res);
             toast.success(res.message);
+            setImages(res.images);
             setImage(res.image);
         }catch(err){
             toast.error(err?.data?.message || err?.error);
@@ -88,9 +107,16 @@ const ProductEditScreen = () => {
                     <Form.Control type='number' placeholder="Enter price" value={price} onChange={(e)=>setPrice(e.target.value)}></Form.Control>
                 </Form.Group>
                 <Form.Group controlId="image">
-                   <Form.Label>Image</Form.Label>
-                   <Form.Control type='text' placeholder="Enter image url" value={image} onChange={(e)=>setImage}></Form.Control>
-                   <Form.Control type='file' label="Choose file" onChange={uploadFileHandler}></Form.Control>
+                   <Form.Label>Upload Images (Upto 5)</Form.Label>
+                  
+                   <Form.Control type='file'multiple label="Choose file" onChange={uploadFileHandler}></Form.Control>
+                   {images?.length > 0 && (
+                                <div className="mt-2 flex">
+                                    {images?.map((image, index) => (
+                                        <img key={index} src={image} alt={`Uploaded preview ${index}`} style={{ width: '200px', height: '200px', marginRight: '10px' }} />
+                                    ))}
+                                </div>
+                            )}
                 </Form.Group>
                 <Form.Group controlId="brand">
                     <Form.Label>Brand</Form.Label>
