@@ -16,6 +16,8 @@ function ProductScreen() {
     const [rating,setRating] = useState(0);
     const [comment,setComment] = useState("");
 
+    const[currImage,setCurrImage] = useState(0);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -70,7 +72,19 @@ function ProductScreen() {
             <Meta title={product.name}/>
             <Row className='mt-4'>
                 <Col md={5}>
-                <Image src={product.image} alt = {product.name} fluid></Image>
+                {/* <Image src={product.image} alt = {product.name} fluid></Image> */}
+                <div className='w-full'>
+                    <div className='flex gap-4 items-center '>
+                        <div className='flex flex-col gap-1'>
+                            {product.images.map((image,index)=>(
+                                <Image src={image} width={50} height={50} alt = {product.name} onMouseOver={e=>(setCurrImage(index))} className='cursor-pointer rounded-lg'></Image>
+                            ))}
+                        </div>
+                        <div className='flex-1' >
+                            <Image src={product.images[currImage]} alt={product.name} fluid style={{ height: '700px', width: '550px' }} />
+                        </div>
+                    </div>
+                </div>
                 </Col>
                 <Col md={4}>
                 <ListGroup variant='flush'>

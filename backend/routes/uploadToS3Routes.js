@@ -66,7 +66,7 @@ router.post(
 
         // Process image with sharp
         const buffer = await sharp(file.buffer)
-          .resize({ height: 1920, width: 1080, fit: "contain" }) // Corrected typo
+          .resize({ height: 500, width: 500 }) // Corrected typo
           .flatten({ background: { r: 128, g: 128, b: 128 } }) // Add background color
           .toBuffer();
 
